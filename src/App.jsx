@@ -23,13 +23,14 @@ const PRESETS = [
 
 const ACCEPTED = [".splat",".ply",".ksplat",".spz"];
 
-function buildCode({ src, fileFormat, height, background, fov, alphaThreshold, sphericalHarmonics, antialiased, dynamicScene, cameraUp }) {
+function buildCode({ src, fileFormat, height, background, fov, alphaThreshold, sphericalHarmonics, antialiased, dynamicScene, cameraUp, splatRotation }) {
   return [
     `import GaussianSplatViewer from "./components/GaussianSplatViewer";`,``,
     `<GaussianSplatViewer`,
     `  src="${src || "https://example.com/cena.splat"}"`,
     fileFormat ? `  fileFormat="${fileFormat}"` : null,
     `  cameraUp={[${cameraUp.join(", ")}]}`,
+    `  splatRotation={[${splatRotation.join(", ")}]}`,
     `  height="${height}"`,
     `  background="${background}"`,
     fov !== 60               ? `  fov={${fov}}`                              : null,
@@ -114,7 +115,8 @@ export default function App() {
   const [sphericalHarmonics, setSH]                 = useState(0);
   const [antialiased,        setAA]                 = useState(true);
   const [dynamicScene,       setDyn]                = useState(false);
-  const [cameraUp,           setCameraUp]           = useState("0,-1,-0.6");
+  const [cameraUp,           setCameraUp]           = useState("0,1,0");
+  const [splatRotation,      setSplatRotation]      = useState("1,0,0,0");
   const [status,             setStatus]             = useState("Arraste um arquivo .splat ou escolha um preset");
   const [loaded,             setLoaded]             = useState(false);
   const [isDragging,         setIsDragging]         = useState(false);
@@ -271,10 +273,19 @@ export default function App() {
               <div style={{display:"flex",alignItems:"center",gap:"0.5rem"}}>
                 <Label c="Camera Up"/>
                 <select value={cameraUp} onChange={e=>setCameraUp(e.target.value)} style={{flex:1,padding:"0.35rem 0.5rem",background:"rgba(255,255,255,0.03)",border:`1px solid ${T.border}`,borderRadius:"6px",color:T.text,fontFamily:T.font,fontSize:"0.7rem",outline:"none"}}>
-                  <option value="0,-1,-0.6">Invertido (Y-Down / Colmap)</option>
                   <option value="0,1,0">Padrão (Y-Up / Three.js)</option>
+                  <option value="0,-1,-0.6">Invertido (Y-Down / Colmap)</option>
                   <option value="0,-1,0">Y-Down Direto</option>
                   <option value="0,0,1">Z-Up (Blender/ROS)</option>
+                </select>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:"0.5rem"}}>
+                <Label c="Splat Rotation"/>
+                <select value={splatRotation} onChange={e=>setSplatRotation(e.target.value)} style={{flex:1,padding:"0.35rem 0.5rem",background:"rgba(255,255,255,0.03)",border:`1px solid ${T.border}`,borderRadius:"6px",color:T.text,fontFamily:T.font,fontSize:"0.7rem",outline:"none"}}>
+                  <option value="1,0,0,0">Rotacionar 180° no X (Flip Y/Z)</option>
+                  <option value="0,0,0,1">Sem rotação (Padrão)</option>
+                  <option value="0,0,1,0">Rotacionar 180° no Z</option>
+                  <option value="0.7071,0,0,0.7071">Rotacionar 90° no X</option>
                 </select>
               </div>
               <Toggle label="Antialiased" checked={antialiased} onChange={setAA}/>
@@ -310,12 +321,14 @@ export default function App() {
           <div style={{position:"relative",overflow:"hidden"}}>
             {activeSrc ? (() => {
               const parsedCameraUp = cameraUp.split(",").map(Number);
+              const parsedSplatRotation = splatRotation.split(",").map(Number);
               return (
                 <GaussianSplatViewer
                   key={`${viewerKey}-${activeSrc}`}
                   src={activeSrc}
                   fileFormat={activeFileFormat || undefined}
                   cameraUp={parsedCameraUp}
+                  splatRotation={parsedSplatRotation}
                   width="100%" height="100%"
                   background={background}
                   fov={fov} alphaThreshold={alphaThreshold}
@@ -341,7 +354,7 @@ export default function App() {
             )}
           </div>
 
-          <CodePanel code={buildCode({src:activeSrc||urlInput,fileFormat:activeFileFormat,height,background,fov,alphaThreshold,sphericalHarmonics,antialiased,dynamicScene,cameraUp:cameraUp.split(",").map(Number)})}/>
+          <CodePanel code={buildCode({src:activeSrc||urlInput,fileFormat:activeFileFormat,height,background,fov,alphaThreshold,sphericalHarmonics,antialiased,dynamicScene,cameraUp:cameraUp.split(",").map(Number),splatRotation:splatRotation.split(",").map(Number)})}/>
         </div>
       </div>
     </div>

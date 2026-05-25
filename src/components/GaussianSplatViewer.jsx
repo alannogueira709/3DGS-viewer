@@ -95,6 +95,7 @@ export default function GaussianSplatViewer({
   src,
   fileFormat,
   cameraUp = [0, 1, 0],
+  splatRotation = [0, 0, 0, 1],
   width = "100%",
   height = "500px",
   background = "#0a0a12",
@@ -211,6 +212,7 @@ export default function GaussianSplatViewer({
           splatAlphaRemovalThreshold: alphaThreshold,
           showLoadingUI:              false,
           progressiveLoad:            isBlob ? false : true,
+          rotation:                   splatRotation,
           onProgress: (pct, _l, _t, msg) => {
             if (!mounted) return;
             const p = Math.min(Math.round(pct * 100), 99);
@@ -317,7 +319,7 @@ export default function GaussianSplatViewer({
     init();
     return () => { cleanupRef.current?.(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src, fileFormat, fov, antialiased, dynamicScene, sphericalHarmonics, alphaThreshold, retryKey, cameraUp]);
+  }, [src, fileFormat, fov, antialiased, dynamicScene, sphericalHarmonics, alphaThreshold, retryKey, cameraUp, splatRotation]);
  
   const handleRetry = useCallback(() => {
     cleanupRef.current?.();

@@ -2,7 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main' # Ou 'master', dependendo da sua branch principal
+    branches:
+      - main # Ou 'master', dependendo da sua branch principal
 
 # Permissões necessárias para o GitHub Pages
 permissions:

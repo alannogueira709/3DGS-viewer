@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
-  base: '/3DGS-viewer/'
+  base: '/3DGS-viewer/',
 })

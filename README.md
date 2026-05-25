@@ -1,18 +1,23 @@
-# React + Vite
+# Gaussian Splattings 3D Web Viewer 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains a web viewer for 3D Gaussian Splattings, it supports previously downloaded Splats hosted in your local machine as well as 4 splats with urls available in public datasets on Hugging Face by cakewalk. 
 
-Currently, two official plugins are available:
+The walkthrough to run it on your local machine is:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+#Clone repository
+git clone https://github.com/alannogueira709/3DGS-viewer.git
 
-## React Compiler
+#Navigate into the project directory
+cd 3DGS-viewer
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+# Install core dependencies (you can use your preferred package manager)
+pnpm install
 
-Note: This will impact Vite dev & build performances.
+# Run the development server
+pnpm run dev --host
+```
+## Demo of the usage:
+In this GIF, I used a splat downloaded from superspl.at. Initially, the file had to be converted to the .splat format, but the viewer now natively supports .ply files as well.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+<img width="1080" height="608" alt="moon" src="https://github.com/user-attachments/assets/557d6f68-ec2f-4c35-85fc-34e549da38ff" />
